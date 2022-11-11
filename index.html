@@ -1,23 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <script src="index.js"></script>
-    <title>Joshua Nagy - Portfolio</title>
-</head>
+<html>
 <body>
-    <header>
-            <img class= "logo" src="" alt="">
-            <nav>
-                <ul class="navbtns">
-                    <li><a href="">About Me</a></li>
-                    <li><a href="">Projects</a></li>
-                </ul>
-            </nav>
-            <a href="#" class="cta"><button>Contact</button></a>
-    </header> 
+
+<form id="frm1" action="/action_page.php">
+  First name: <input type="text" id="fname"><br>
+  Last name: <input type="text" id="lname"><br><br>
+</form> 
+
+<button onclick="myFunction()">Start</button>
+
+<p id="demo"></p>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("fname");
+  var s = document.getElementById("fname")
+  var text = "";
+  var i;
+  for (i = 0; i < x.length ;i++) {
+    text += x.elements[i].value + "<br>";
+  }
+  document.getElementById("demo").innerHTML = s.value;
+}
+</script>
+
 </body>
 </html>
