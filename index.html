@@ -1,28 +1,124 @@
 <!DOCTYPE html>
 <html>
+<head>
+	<title>Countdown Timer</title>
+	<style>
+		body {
+			background-color: #f0f0f0;
+			font-family: Arial, sans-serif;
+		}
+		h1 {
+			text-align: center;
+			margin-top: 50px;
+			color: #4CAF50;
+		}
+		.container {
+			margin: 0 auto;
+			width: 400px;
+			padding: 20px;
+			background-color: #fff;
+			box-shadow: 0 0 10px rgba(0,0,0,0.2);
+			border-radius: 5px;
+		}
+		label {
+			display: block;
+			margin-bottom: 10px;
+			font-weight: bold;
+			color: #555;
+		}
+		input[type="text"] {
+			width: 100%;
+			padding: 10px;
+			border: 2px solid #ccc;
+			border-radius: 4px;
+			box-sizing: border-box;
+			margin-bottom: 20px;
+			font-size: 16px;
+		}
+		button {
+			background-color: #4CAF50;
+			color: #fff;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 16px;
+			margin-bottom: 20px;
+		}
+		button:hover {
+			background-color: #3e8e41;
+		}
+		#progress-bar-container {
+			width: 100%;
+			height: 10px;
+			background-color: #ccc;
+			margin-bottom: 20px;
+			border-radius: 5px;
+			overflow: hidden;
+		}
+		#progress-bar {
+			width: 0%;
+			height: 100%;
+			background-color: #4CAF50;
+			transition: width 1s ease-in-out;
+		}
+		#percent {
+			font-size: 20px;
+			font-weight: bold;
+			color: #555;
+			margin-bottom: 20px;
+		}
+	</style>
+</head>
 <body>
+	<h1>Countdown Timer</h1>
+	<div class="container">
+		<label for="starttime">Start:</label>
+		<input type="text" id="starttime">
+		<label for="stoptime">Stop:</label>
+		<input type="text" id="stoptime">
+		<button onclick="startLoop()">Start Timer</button>
+		<p id="percent"></p>
+		<div id="progress-bar-container">
+			<div id="progress-bar"></div>
+		</div>
+	</div>
+	<script>
+		function getCurrentTime() {
+			const now = new Date();
+			const currentTime = now.toLocaleTimeString();
+			return currentTime;
+		}
 
-<form id="frm1" action="/action_page.php">
-  First name: <input type="text" id="fname"><br>
-  Last name: <input type="text" id="lname"><br><br>
-</form> 
+		function timeToDecimal(timenow) {
+			const time = timenow.split(':');
+			const hours = parseInt(time[0], 10);
+			const minutes = parseInt(time[1], 10);
+			const seconds = parseInt(time[2], 10) || 0; // handle missing seconds
+			const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+			return totalSeconds;
+		}
 
-<button onclick="myFunction()">Start</button>
+		function percentage() {
+			const start = document.getElementById("starttime").value;
+			const stop = document.getElementById("stoptime").value;
+			const percent = (timeToDecimal(getCurrentTime())-timeToDecimal(start)) / (timeToDecimal(stop)-timeToDecimal(start)) * 100;
+            return percent.toFixed(2);
+            if (percent.toFixed(2) >= 100){
+                return
+            }
+        }
+        function updateProgressBar() {
+		const percent = percentage();
+		document.getElementById("percent").innerHTML = percent + "%";
+		document.getElementById("progress-bar").style.width = percent + "%";
+		if (percent >= 100) {
+			clearInterval(intervalId);
+		}
+	}
 
-<p id="demo"></p>
-
-<script>
-function myFunction() {
-  var x = document.getElementById("fname");
-  var s = document.getElementById("fname")
-  var text = "";
-  var i;
-  for (i = 0; i < x.length ;i++) {
-    text += x.elements[i].value + "<br>";
-  }
-  document.getElementById("demo").innerHTML = s.value;
-}
+	function startLoop() {
+		intervalId = setInterval(updateProgressBar, 1000);
+	}
 </script>
 
-</body>
-</html>
