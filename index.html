@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Countdown Timer</title>
+	<title>Percentage Timer</title>
 	<style>
 		body {
 			background-color: #f0f0f0;
@@ -44,13 +44,14 @@
 			cursor: pointer;
 			font-size: 16px;
 			margin-bottom: 20px;
+            transition: background-color 0.5s;
 		}
 		button:hover {
-			background-color: #3e8e41;
+			background-color: #d13131;
 		}
 		#progress-bar-container {
 			width: 100%;
-			height: 10px;
+			height: 15px;
 			background-color: #ccc;
 			margin-bottom: 20px;
 			border-radius: 5px;
@@ -71,11 +72,11 @@
 	</style>
 </head>
 <body>
-	<h1>Countdown Timer</h1>
+	<h1>Percentage Timer</h1>
 	<div class="container">
-		<label for="starttime">Start:</label>
+		<label for="starttime" title="Enter the start time in the format hh:mm:ss">Start:</label>
 		<input type="text" id="starttime">
-		<label for="stoptime">Stop:</label>
+		<label for="stoptime" title="Enter the stop time in the format hh:mm:ss">Stop:</label>
 		<input type="text" id="stoptime">
 		<button onclick="startLoop()">Start Timer</button>
 		<p id="percent"></p>
