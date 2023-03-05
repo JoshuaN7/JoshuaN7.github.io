@@ -75,9 +75,9 @@
 	<h1>Percentage Timer</h1>
 	<div class="container">
 		<label for="starttime" title="Enter the start time in the format hh:mm:ss">Start:</label>
-		<input type="text" id="starttime">
+		<input type="text" id="starttime" placeholder = "hh:mm:ss">
 		<label for="stoptime" title="Enter the stop time in the format hh:mm:ss">Stop:</label>
-		<input type="text" id="stoptime">
+		<input type="text" id="stoptime" placeholder = "hh:mm:ss">
 		<button onclick="startLoop()">Start Timer</button>
 		<p id="percent"></p>
 		<div id="progress-bar-container">
@@ -86,40 +86,44 @@
 	</div>
 	<script>
 		function getCurrentTime() {
-			const now = new Date();
-			const currentTime = now.toLocaleTimeString();
+			const now = new Date()
+			const currentTime = now.toLocaleTimeString('en-US', {hour12: false})
 			return currentTime;
 		}
 
 		function timeToDecimal(timenow) {
-			const time = timenow.split(':');
-			const hours = parseInt(time[0], 10);
-			const minutes = parseInt(time[1], 10);
-			const seconds = parseInt(time[2], 10) || 0; // handle missing seconds
-			const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+			const time = timenow.split(':')
+			const hours = parseInt(time[0], 10)
+			const minutes = parseInt(time[1], 10)
+			const seconds = parseInt(time[2], 10) || 0 // handle missing seconds
+			const totalSeconds = (hours * 3600) + (minutes * 60) + seconds
 			return totalSeconds;
 		}
 
 		function percentage() {
-			const start = document.getElementById("starttime").value;
-			const stop = document.getElementById("stoptime").value;
-			const percent = (timeToDecimal(getCurrentTime())-timeToDecimal(start)) / (timeToDecimal(stop)-timeToDecimal(start)) * 100;
-            return percent.toFixed(2);
-            if (percent.toFixed(2) >= 100){
-                return
+			const start = document.getElementById("starttime").value
+			const stop = document.getElementById("stoptime").value
+			var percent = (timeToDecimal(getCurrentTime())-timeToDecimal(start)) / (timeToDecimal(stop)-timeToDecimal(start)) * 100
+			if (percent.toFixed(2) >= 100){
+                return percent = 100
             }
+            return percent.toFixed(2)
+            
         }
         function updateProgressBar() {
-		const percent = percentage();
-		document.getElementById("percent").innerHTML = percent + "%";
-		document.getElementById("progress-bar").style.width = percent + "%";
+		const percent = percentage()
+		document.getElementById("percent").innerHTML = percent + "%"
+		document.getElementById("progress-bar").style.width = percent + "%"
 		if (percent >= 100) {
-			clearInterval(intervalId);
+			clearInterval(intervalId)
 		}
 	}
 
 	function startLoop() {
-		intervalId = setInterval(updateProgressBar, 1000);
+		intervalId = setInterval(updateProgressBar, 1000)
+		if(isNaN(document.getElementById("starttime")) || isNan(document.getElementById("stoptime"))){
+			return
+		}
 	}
 </script>
 
