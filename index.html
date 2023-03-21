@@ -35,7 +35,24 @@
 			margin-bottom: 20px;
 			font-size: 16px;
 		}
-		button {
+		#tab {
+			background-color: #ececec;
+			color: rgb(0, 0, 0);
+			padding: 10px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 16px;
+			margin-bottom: 20px;
+            transition: background-color 0.5s;
+		}
+		#tab:hover {
+			background-color: #a7a7a7;
+		}
+		#tab.active {
+			background-color: #a0a0a0;
+		}
+		#startbtn {
 			background-color: #4CAF50;
 			color: #fff;
 			padding: 10px 20px;
@@ -46,7 +63,7 @@
 			margin-bottom: 20px;
             transition: background-color 0.5s;
 		}
-		button:hover {
+		#startbtn:hover {
 			background-color: #d13131;
 		}
 		#progress-bar-container {
@@ -57,33 +74,49 @@
 			border-radius: 5px;
 			overflow: hidden;
 		}
-		#progress-bar {
+		#progress-bar, #pprogress-bar {
 			width: 0%;
 			height: 100%;
 			background-color: #4CAF50;
 			transition: width 1s ease-in-out;
 		}
-		#percent {
+		#percent, #ppercent {
 			font-size: 20px;
 			font-weight: bold;
 			color: #555;
 			margin-bottom: 20px;
 		}
+		
 	</style>
 </head>
-<body>
+<body onload = 'load(event)'>
 	<h1>Percentage Timer</h1>
-	<div class="container">
-		<label for="starttime" title="Enter the start time in the format hh:mm:ss">Start:</label>
-		<input type="text" id="starttime" placeholder = "hh:mm:ss">
-		<label for="stoptime" title="Enter the stop time in the format hh:mm:ss">Stop:</label>
-		<input type="text" id="stoptime" placeholder = "hh:mm:ss">
-		<button onclick="startLoop()">Start Timer</button>
-		<p id="percent"></p>
-		<div id="progress-bar-container">
-			<div id="progress-bar"></div>
-		</div>
-	</div>
+    <div class="parent">
+        <div class="container">
+			<div class="tab">
+				<button id="tab" class = "tablinks" tag="1" onclick="opentab(event,'Default')">Default</button>
+				<button id="tab" class = "tablinks" tag="2" onclick="opentab(event,'Schedule')">Schedule</button>
+			</div>
+			<div id="Default" class="tabcontent">
+				<label for="starttime" title="Enter the start time in the format hh:mm:ss">Start:</label>
+				<input type="text" id="starttime" placeholder = "hh:mm:ss">
+				<label for="stoptime" title="Enter the stop time in the format hh:mm:ss">Stop:</label>
+				<input type="text" id="stoptime" placeholder = "hh:mm:ss">
+				<button id="startbtn"onclick="startLoop()">Start Timer</button>
+				<p id="percent"></p>
+				<div id="progress-bar-container">
+					<div id="progress-bar"></div>
+				</div>
+			</div>
+			<div id="Schedule" class="tabcontent">
+				<button id="startbtn"onclick="perstartLoop()">Start Timer</button>
+				<p id="ppercent"></p>
+				<div id="progress-bar-container">
+					<div id="pprogress-bar"></div>
+				</div>
+			</div>
+        </div>
+    </div>
 	<script>
 		function getCurrentTime() {
 			const now = new Date()
@@ -111,19 +144,106 @@
             
         }
         function updateProgressBar() {
-		const percent = percentage()
-		document.getElementById("percent").innerHTML = percent + "%"
-		document.getElementById("progress-bar").style.width = percent + "%"
-		if (percent >= 100) {
-			clearInterval(intervalId)
+			const percent = percentage()
+			document.getElementById("percent").innerHTML = percent + "%"
+			document.getElementById("progress-bar").style.width = percent + "%"
+			if (percent >= 100) {
+				clearInterval(intervalId)
+			}
 		}
-	}
 
-	function startLoop() {
-		intervalId = setInterval(updateProgressBar, 1000)
-		if(isNaN(document.getElementById("starttime")) || isNan(document.getElementById("stoptime"))){
-			return
+		function startLoop() {
+			intervalId = setInterval(updateProgressBar, 1000)
+			if(isNaN(document.getElementById("starttime")) || isNan(document.getElementById("stoptime"))){
+				return
+			}
 		}
-	}
+
+		function opentab(evt, name)	{
+			var i, tabcontent, tablinks;
+			tabcontent = document.getElementsByClassName("tabcontent");
+			for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			}
+			tablinks = document.getElementsByClassName("tablinks");
+			for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].className = tablinks[i].className.replace(" active", "");
+			}
+			document.getElementById(name).style.display = "block";
+			evt.currentTarget.className += " active";
+		}
+
+		function load() {
+			opentab(event, "Default");
+        	var tabcontent = document.getElementsByClassName("tabcontent");
+			for (var i = 1; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			}
+		}
+
+
+		//functions for percentage following schedule
+		function period() {
+			now = timeToDecimal(getCurrentTime())
+			if (now >= 33300 && now < 37800) { //First period
+				let start = 33300
+				let stop = 37800
+				let number = 1
+				return {start,stop,number}
+			} else if (now >= 38400 && now < 42900) { //Second period
+				let start = 38400
+				let stop = 42900
+				let number = 2
+				return {start,stop,number}
+			} else if (now >= 46200 && now < 50700) { //Third period
+				let start = 46200
+				let stop = 50700
+				let number = 3
+				return {start,stop,number}
+			} else if (now >= 51300 && now < 55800) { //Fourth period
+				let start = 51300
+				let stop = 55800
+				let number = 4
+				return {start,stop,number}
+			} else{
+				return
+			}
+		}
+
+		function perpercentage() {
+			let x = period()
+			if (!x) {
+				return "break"
+			}
+			let number = x.number
+			const start = x.start
+			const stop = x.stop
+			var percent = (timeToDecimal(getCurrentTime())-start) / (stop-start) * 100
+			if (percent.toFixed(2) >= 100){
+                return percent = 100
+            }
+			let per = percent.toFixed(2)
+            return {per, number}
+            
+        }
+        function perupdateProgressBar() {
+			let x = perpercentage()
+			let percent = x.per
+			let period = x.number
+			if (percent == "break"){
+				return document.getElementById("ppercent").innerHTML = "Its break!"
+			}
+			document.getElementById("ppercent").innerHTML = percent + "% Period # " + period
+			document.getElementById("pprogress-bar").style.width = percent + "%"
+			if (percent >= 100) {
+				clearInterval(intervalId)
+			}
+		}
+
+		function perstartLoop() {
+			intervalId = setInterval(perupdateProgressBar, 1000)
+		}
+		
+
 </script>
 
