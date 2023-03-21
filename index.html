@@ -185,6 +185,7 @@
 		//functions for percentage following schedule
 		function period() {
 			now = timeToDecimal(getCurrentTime())
+			console.log(now)
 			if (now >= 33300 && now < 37800) { //First period
 				let start = 33300
 				let stop = 37800
@@ -205,15 +206,19 @@
 				let stop = 55800
 				let number = 4
 				return {start,stop,number}
-			} else{
-				return
+			} else {
+				let start = null
+				let stop = null
+				let number = null
+				return {start,stop,number}
 			}
 		}
 
 		function perpercentage() {
 			let x = period()
-			if (!x) {
-				return "break"
+			if (x.start == null) {
+				let per = "break"
+				return {per}
 			}
 			let number = x.number
 			const start = x.start
@@ -226,6 +231,7 @@
             return {per, number}
             
         }
+
         function perupdateProgressBar() {
 			let x = perpercentage()
 			let percent = x.per
