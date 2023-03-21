@@ -1,2 +1,2 @@
 # JoshuaN7.github.io
-My portfolio website
+Website that calculates the percentage of time that has gone by within a certain timeframe
