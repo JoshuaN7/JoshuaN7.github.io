@@ -95,7 +95,7 @@
         <div class="container">
 			<div class="tab">
 				<button id="tab" class = "tablinks" tag="1" onclick="opentab(event,'Default')">Default</button>
-				<button id="tab" class = "tablinks" tag="2" onclick="opentab(event,'Schedule')">Schedule</button>
+				<button id="tab" class = "tablinks" tag="2" onclick="opentab(event,'Schedule'), perstartLoop()">Schedule</button>
 			</div>
 			<div id="Default" class="tabcontent">
 				<label for="starttime" title="Enter the start time in the format hh:mm:ss">Start:</label>
@@ -109,7 +109,6 @@
 				</div>
 			</div>
 			<div id="Schedule" class="tabcontent">
-				<button id="startbtn"onclick="perstartLoop()">Start Timer</button>
 				<p id="ppercent"></p>
 				<div id="progress-bar-container">
 					<div id="pprogress-bar"></div>
