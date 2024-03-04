@@ -86,9 +86,25 @@
 			color: #555;
 			margin-bottom: 20px;
 		}
+		.language-dropdown {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .language-dropdown select {
+            padding: 8px;
+            font-size: 16px;
+            border: 0px solid #ccc;
+            border-radius: 0px;
+			outline: none;
+            background-color: #fff;
+            cursor: pointer;
+        }
 		
 	</style>
 </head>
+<meta charset="UTF-8">
 <body onload = 'load(event)'>
 	<h1>Percentage Timer</h1>
     <div class="parent">
@@ -115,6 +131,12 @@
 				</div>
 			</div>
         </div>
+    </div>
+	<div class="language-dropdown">
+        <select id="languageSelector" onchange="changeLanguage(), perupdateProgressBar()">
+            <option value="en">EN</option>
+            <option value="fr">FR</option>
+        </select>
     </div>
 	<script>
 		function getCurrentTime() {
@@ -184,7 +206,7 @@
 		//functions for percentage following schedule
 		function period() {
 			now = timeToDecimal(getCurrentTime())
-			console.log(now)
+			//console.log(now)
 			if (now >= 33300 && now < 37800) { //First period
 				let start = 33300
 				let stop = 37800
@@ -232,12 +254,17 @@
         }
 
         function perupdateProgressBar() {
+			var language = document.getElementById("languageSelector").value;
 			let x = perpercentage()
 			let percent = x.per
 			let period = x.number
-			if (percent == "break"){
+			if (percent == "break" && language =="en" ){
 				return document.getElementById("ppercent").innerHTML = "Its break!"
 			}
+			else if(percent == "break" && language =="fr" ){
+				return document.getElementById("ppercent").innerHTML = "C'est la pause!"
+			}
+
 			document.getElementById("ppercent").innerHTML = percent + "% Period # " + period
 			document.getElementById("pprogress-bar").style.width = percent + "%"
 			if (percent >= 100) {
@@ -248,6 +275,47 @@
 		function perstartLoop() {
 			intervalId = setInterval(perupdateProgressBar, 1000)
 		}
+
+		//Language Text
+        const languageText = {
+            'en': {
+                'timerTitle': 'Percentage Timer',
+                'defaultTab': 'Default',
+                'scheduleTab': 'Schedule',
+                'startLabel': 'Start:',
+                'stopLabel': 'Stop:',
+                'startBtn': 'Start Timer'
+            },
+            'fr': {
+                'timerTitle': 'Percentage Timer',
+                'defaultTab': 'Défaut',
+                'scheduleTab': 'Horraire',
+                'startLabel': 'Début:',
+                'stopLabel': 'Fin:',
+                'startBtn': 'Commencer la minuterie'
+            }
+        };
+
+        function changeLanguage() {
+        var language = document.getElementById("languageSelector").value;
+        var text = languageText[language];
+
+        // Update title
+        document.getElementsByTagName("title")[0].innerText = text.timerTitle;
+
+        // Update tab buttons
+        var tablinks = document.getElementsByClassName("tablinks");
+        for (var i = 0; i < tablinks.length; i++) {
+            tablinks[i].innerText = (i == 0) ? text.defaultTab : text.scheduleTab;
+        }
+
+        // Update labels and button in Default tab
+        var defaultTabContent = document.getElementById("Default").getElementsByTagName("label");
+        defaultTabContent[0].innerText = text.startLabel;
+        defaultTabContent[1].innerText = text.stopLabel;
+        document.getElementById("startbtn").innerText = text.startBtn;
+    }
+
 		
 
 </script>
